@@ -7,6 +7,14 @@ const todoController = {
             // get the description from the request body
             const { description, status } = req.body;
 
+            // validation
+            if (typeof description !== 'string' || description.trim() === '') {
+                return res.status(400).send({ message: 'Invalid description' });
+            }
+            if (status !== undefined) {
+                return res.status(400).send({ message: 'Invalid status' });
+            }
+
             // create a new todo
             const newTodo = new Todo({
                 description,
@@ -35,6 +43,11 @@ const todoController = {
         try {
             const { id } = req.params;
 
+            // validation
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                return res.status(400).send({ message: 'Invalid ID format' });
+            }
+
             // const todo = await Todo.find({ _id: id}, { __v: 0 });
             const todo = await Todo.findById(id, { __v: 0 });
 
@@ -51,8 +64,20 @@ const todoController = {
         try {
             const { id } = req.params;
 
+            // validation of objectId
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                return res.status(400).send({ message: 'Invalid ID format' });
+            }
+
             const { description, status } = req.body;
 
+            if (typeof description !== 'string' || description.trim() === '') {
+                return res.status(400).send({ message: 'Invalid description' });
+            }
+            if (status !== undefined) {
+                return res.status(400).send({ message: 'Invalid status' });
+            }
+            
             // get the todo from the database matching the id
             const todo = await Todo.findById(id, { __v: 0 });
 
@@ -75,6 +100,11 @@ const todoController = {
     deleteTodo: async (req, res) => {
         try {
             const { id } = req.params;
+
+            // validation of objectId
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                return res.status(400).send({ message: 'Invalid ID format' });
+            }
 
             // find the todo by id and delete it
             const deletedTodo = await Todo.findByIdAndDelete(id);
