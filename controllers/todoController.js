@@ -5,11 +5,12 @@ const todoController = {
     createTodo: async (req, res) => {
         try {
             // get the description from the request body
-            const { description } = req.body;
+            const { description, status } = req.body;
 
             // create a new todo
             const newTodo = new Todo({
-                description
+                description,
+                status
             });
 
             // save the todo to the database
