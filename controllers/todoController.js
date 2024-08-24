@@ -61,7 +61,7 @@ const todoController = {
 
             // update the todo with the new data
             if (description) todo.description = description;
-            if (status) todo.status = status;
+            if (status != null) todo.status = status;
 
             // save the updated todo
             const updatedTodo = await todo.save();
