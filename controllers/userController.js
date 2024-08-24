@@ -21,7 +21,7 @@ const userController = {
 
             // hash the password
             const hashedPassword = await bcrypt.hash(password, saltRounds);
-            
+
             // create a new user
             const newUser = new User({ username, password: hashedPassword, name });
 
@@ -85,6 +85,7 @@ const userController = {
             const userId = request.userId;
 
             // find the user in the database
+            // exclude fields are indicated with minus sign
             const user = await User.findById(userId).select('-password -__v -_id');
 
             // if the user does not exist, return an error
@@ -94,6 +95,17 @@ const userController = {
 
             // if the user exists, return the user data
             response.status(200).json({ message: 'User found', user });
+        } catch (error) {
+            response.status(500).json({ message: error.message });
+        }
+    },
+    getAllUsers: async (request, response) => {
+        try {
+            // get all the users from the database
+            const users = await User.find().select('-password -__v -_id');
+
+            // return the users
+            response.status(200).json({ message: 'All users', users });
         } catch (error) {
             response.status(500).json({ message: error.message });
         }
